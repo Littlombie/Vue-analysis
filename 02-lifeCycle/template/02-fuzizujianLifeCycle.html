@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>父子组件的生命周期</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .child {
+        border: 1px solid #f00;
+    }
+      .panel {
+          margin-top:50px;
+          border: 1px solid #ccc;
+      }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <child-component></child-component>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+    <script type="text/template" id="lifeCycle-grandChild">
+        <div class="panel">
+       父组件传过来的名字： {{name}}
+      <button @click="changeName">改变名字</button>
+      <button @click="zongjie">总结</button>
+    </div>
+  </script>
+    <script type="text/template" id="lifeCycle-child">
+        <div class="child">
+        这是父组件：
+      <grand-panel :name="name" @pushName="getNewName" @showPanel="showpanel"></grand-panel>
+      <div class="" v-show="showPanel">
+           <p> 仅当子组件完成挂载后，父组件才会挂载<br>
+                当子组件完成挂载后，父组件会主动执行一次beforeUpdate/updated钩子函数（仅首次）<br>
+                父子组件在data变化中是分别监控的，但是在更新props中的数据是关联的（可实践）<br>
+                销毁父组件时，先将子组件销毁后才会销毁父组件</p>
+      </div>
+    </div>
+  </script>
+    <script>
+        const COMPONENT_NAME = 'complex'
+        Vue.component('child-component', {
+            template: "#lifeCycle-child",
+            data() {
+                return {
+                    name: 'Lisa',
+                    showPanel: false
+                }
+            },
+            created() {
+                console.log(`this name is ${this.name}`);
+            },
+            beforeCreate() {
+                console.log(`--${COMPONENT_NAME}--父-beforeCreate`)
+            },
+            created() {
+                console.log(`--${COMPONENT_NAME}--父-created`)
+            },
+            beforeMount() {
+                console.log(`--${COMPONENT_NAME}--父-beforeMount`)
+            },
+            mounted() {
+                console.log(`--${COMPONENT_NAME}--父-mounted`)
+            },
+            beforeUpdate() {
+                console.log(`--${COMPONENT_NAME}--父-beforeUpdate`)
+            },
+            updated() {
+                console.log(`--${COMPONENT_NAME}--父-updated`)
+            },
+            beforeDestroy() {
+                console.log(`--${COMPONENT_NAME}--父-beforeDestroy`)
+            },
+            destroyed() {
+                console.log(`--${COMPONENT_NAME}--父-destroyed`)
+            },
+            methods: {
+                getNewName(val) {
+                    console.log(`修改后的名字${this.name} -- ${val}`);
+                    this.name = val;
+                },
+                showpanel() {
+                    this.showPanel = true;
+                    let _this = this;
+                    setTimeout( function () {
+                        _this.$destroy();
+                    },5000)
+                }
+            }
+        })
+        Vue.component('grand-panel', {
+            template: '#lifeCycle-grandChild',
+            props: {
+                name: {
+                    type: String,
+                    default: ''
+                }
+            },
+            data() {
+                return {
+                    newName: 'wangwu'
+                }
+            },
+            beforeCreate() {
+                console.log(` --data未初始化--子-beforeCreate`);
+                console.log(`props的值${this.name} --子-beforeCreate`); // 在此会报错
+            },
+            created() {
+                console.log(`props的值${this.name} --子-created`);
+            },
+            beforeMount() {
+                console.log(`props的值${this.name} --子-beforeMount`)
+            },
+            mounted() {
+                console.log(`props的值${this.name} --子-mounted`)
+            },
+            beforeUpdate() {
+                console.log(`props的值${this.name} --子-beforeUpdate`)
+            },
+            updated() {
+                console.log(`props的值${this.name} --子-updated`)
+            },
+            beforeDestroy() {
+                console.log(`props的值${this.name} --子-beforeDestroy`)
+            },
+            destroyed() {
+                console.log(`props的值${this.name} --子-destroyed`)
+            },
+            methods: {
+                changeName() {
+                    console.log(`这个名字是${this.name}，还有${this.newName}`);
+                    this.$emit('pushName', this.newName);
+                },
+                zongjie() {
+                    this.$emit('showPanel');
+                }
+            }
+        })
+    </script>
+    <script>
+        var app = new Vue({
+            el: "#app",
+        });
+    </script>
+</body>
+
+</html>

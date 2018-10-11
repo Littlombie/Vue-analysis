@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue 生命周期</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+</head>
+<body>
+    <div id="App">
+        <div>
+            <h3>单组件</h3>
+            <button @click="dataVar += 1">更新 {{dataVar}}</button>
+            <button @click="handleDestroy">销毁</button>
+            <button @click="showZongjie">总结</button>
+            <div class="" v-show="showzj">
+                <p>
+                    初始化组件时，仅执行了beforeCreate/Created/beforeMount/mounted四个钩子函数<br>
+                    当改变data中定义的变量（响应式变量）时，会执行beforeUpdate/updated钩子函数<br>
+                    当切换组件（当前组件未缓存）时，会执行beforeDestory/destroyed钩子函数<br>
+                    初始化和销毁时的生命钩子函数均只会执行一次，beforeUpdate/updated可多次执行
+                </p>
+            </div>
+        </div>
+    </div>
+   <script>
+      new Vue({
+        el: '#App',
+        data () {
+            return {
+                dataVar: 1,
+                showzj: false
+            }
+        },
+        beforeCreate() {
+            this.compName = 'single'
+            console.log(`--${this.compName}--beforeCreate`)
+            console.log(`--${this.dataVar}--beforeCreate`)
+        },
+        created() {
+            console.log(`--${this.compName}--created`)
+            console.log(`--${this.dataVar}--created`)
+        },
+        beforeMount() {
+            console.log(`--${this.compName}--beforeMount`)
+            console.log(`--${this.dataVar}--beforeMount`)
+        },
+        mounted() {
+            console.log(`--${this.compName}--mounted`)
+            console.log(`--${this.dataVar}--mounted`)
+        },
+        beforeUpdate() {
+            console.log(`--${this.compName}--beforeUpdate`)
+            console.log(`--${this.dataVar}--beforeUpdate`)
+        },
+        updated() {
+            console.log(`--${this.compName}--updated`)
+            console.log(`--${this.dataVar}--updated`)
+        },
+        beforeDestroy() {
+            console.log(`--${this.compName}--beforeDestroy`)
+            console.log(`--${this.dataVar}--beforeDestroy`)
+        },
+        destroyed() {
+            console.log(`--${this.compName}--destroyed`)
+            console.log(`--${this.dataVar}--destroyed`)
+        },
+        methods: {
+            handleDestroy() {
+                this.$destroy()
+            },
+            showZongjie () {
+                this.showzj = true;
+            }
+        }
+    })
+   </script>
+</body>
+</html>

@@ -78,6 +78,7 @@ render (h) {
 注：
 - created阶段的`ajax`请求与`mounted`请求的区别：前者页面视图未出现，如果请求信息过多，页面会长时间处于白屏状态，此时如果做`DOM`请求时会报错,页面还没有渲染出来
 - mounted 不会承诺所有的子组件也都一起被挂载。如果你希望等到整个视图都渲染完毕，可以用 [`vm.$nextTick `](https://blog.csdn.net/shuidinaozhongyan/article/details/72630573)
+(https://blog.csdn.net/sinat_17775997/article/details/71638144)
 
 - `beforeCreate`，`created`，`beforeMount`，`mounted` 是自动被调用  
 - `beforeUpdate`, `updated`,`beforeDestroy`,`destroyed` 是手动调用  

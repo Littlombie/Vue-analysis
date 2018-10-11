@@ -15,7 +15,7 @@
 ## 什么是生命周期？
 
 生命周期：Vue 实例从开始创建、初始化数据、编译模板、挂载Dom→渲染、更新→渲染、卸载等一系列过程，我们称这是 Vue 的生命周期，各个阶段有相对应的事件钩子
-![vue 的生命周期](https://github.com/Littlombie/Vue-analysis/blob/master/02-lifeCycle/lifecycle.png?raw=true)
+![vue 的生命周期](https://github.com/Littlombie/Vue-analysis/blob/master/02-lifeCycle/LifeCycle1.png?raw=true)
 
 * 图中 数据观测： 
     

@@ -85,6 +85,7 @@ render (h) {
 
 - 子组件的`created` 优先于父组件的`created` 执行， 父组件的`beforeCreate` 优先于子组件的`beforeCreate`
 - 子组件的`mounted`优先于父组件的`mounted`， 父组件的`beforeMount` 优先于子组件的 `beforeMount`
+- 子组件的`destroyed`优先于父组件的`beforeDestroy`， 父组件的`beforeDestroy` 优先于子组件的 `beforeDestroy`
 
 #### 最后还有 两个钩子函数没显示  
 activated & deactivated 
@@ -92,6 +93,16 @@ activated & deactivated
 
 - activated： 在组件被激活时调用，在组件第一次渲染时也会被调用，之后每次keep-alive激活时被调用，该钩子在服务器端渲染期间不被调用。
 - deactivated： keep-alive组件停用时调用。该钩子在服务端渲染期间不被调用。
+
+  组件内的离开当前路由钩子beforeRouteLeave =>  路由前置守卫 beforeEach =>
+    全局后置钩子afterEach => deactivated 离开缓存组件 => activated 进入缓存组件(如果你进入的也是缓存路由)
+    // 如果离开的组件没有缓存的话 beforeDestroy会替换deactivated 
+    // 如果进入的路由也没有缓存的话  全局后置钩子afterEach=>销毁 destroyed=> beforeCreate等
+
+
+### 路由导航守卫
+
+[Vue的钩子函数 [路由导航守卫、keep-alive、生命周期钩子]](https://juejin.im/post/5b41bdef6fb9a04fe63765f1)
 
 实例demo：
 <!-- 

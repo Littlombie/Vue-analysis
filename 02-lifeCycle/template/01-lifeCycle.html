@@ -11,8 +11,8 @@
     <div id="App">
         <div>
             <h3>单组件</h3>
-            <button @click="dataVar += 1">更新 {{dataVar}}</button>
-            <button @click="handleDestroy">销毁</button>
+            <button @click="dataVar += 1" ref="btns">更新 {{dataVar}}</button>
+            <button @click="handleDestroy" >销毁</button>
         </div>
     </div>
    <script>
@@ -27,18 +27,22 @@
             this.compName = 'single'
             console.log(`--${this.compName}--beforeCreate`)
             console.log(`--${this.dataVar}--beforeCreate`)
+            console.log(`${this.$refs.btns.innerText}`);
         },
         created() {
             console.log(`--${this.compName}--created`)
             console.log(`--${this.dataVar}--created`)
+            console.log(`${this.$refs.btns.innerText}`);
         },
         beforeMount() {
             console.log(`--${this.compName}--beforeMount`)
             console.log(`--${this.dataVar}--beforeMount`)
+            console.log(`${this.$refs.btns.innerText}`);
         },
         mounted() {
             console.log(`--${this.compName}--mounted`)
             console.log(`--${this.dataVar}--mounted`)
+            console.log(`${this.$refs.btns.innerText}`);
         },
         beforeUpdate() {
             console.log(`--${this.compName}--beforeUpdate`)

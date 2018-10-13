@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="app">
+    <item-panel ></item-panel>
+    <keep-alive>
+      <btn-panel ></btn-panel>
+    </keep-alive>
+    <button @click="showzj">总结</button>
+    <div class="con" v-show="showZongjie">
+      <p>组件的初始化（mounted之前）分开进行，挂载是从上到下依次进行<br>
+          当没有数据关联时，兄弟组件之间的更新和销毁是互不关联的</p>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+  <script type="text/template" id="item-panel">
+    <div  class="item">
+      {{name}}
+    </div>
+  </script>
+  <script type="text/template" id="btn-panel">
+    <div class="btn">
+      <button @click="change">{{operation}}</button>
+    </div>
+  </script>
+  <script>
+    Vue.component('item-panel', {
+      template: '#item-panel',
+      data () {
+        return {
+          name: 'zhangsan'
+        }
+      },
+      beforeCreate() {
+        console.log(`${this.name}--item-beforeCreate`);
+      },
+      created() {
+        bus.$on('changed',this.showChange);
+        console.log(`${this.name}--item-created`);
+      },
+      beforeMount() {
+        console.log(`${this.name}--item-beforeMount`);
+      },
+      mounted() {
+        console.log(`${this.name}--item-mounted`);
+      },
+      beforeUpdate() {
+        console.log(`${this.name}--item-beforeUpdate`);
+      },
+      updated() {
+        console.log(`${this.name}--item-updated`);
+      },
+      beforeDestroy() {
+        console.log(`${this.name}--item-beforeDestroy`);
+      },
+      destroyed() {
+        console.log(`${this.name}--item-destroyed`);
+      },
+      methods: {
+        showChange (val) {
+          console.log(`改变的是${val}`);
+          if (val) {
+            this.name = val;
+          } else {
+            this.name = `点击添加`;
+          }
+        }
+      }
+    })
+    Vue.component('btn-panel', {
+      template: '#btn-panel',
+      data () {
+        return {
+          operation: '添加'
+        }
+      },
+      
+      beforeCreate() {
+        console.log(`${this.operation}--btn-beforeCreate`);
+      },
+      created() {
+        console.log(`${this.operation}--btn-created`);
+      },
+      beforeMount() {
+        console.log(`${this.operation}--btn-beforeMount`);
+      },
+      mounted() {
+        console.log(`${this.operation}--btn-mounted`);
+      },
+      beforeUpdate() {
+        console.log(`${this.operation}--btn-beforeUpdate`);
+      },
+      updated() {
+        console.log(`${this.operation}--btn-updated`);
+      },
+      beforeDestroy() {
+        console.log(`${this.operation}--btn-beforeDestroy`);
+      },
+      destroyed() {
+        console.log(`${this.operation}--btn-destroyed`);
+      },
+      methods: {
+        change () {
+          switch (this.operation) {
+            case '添加':
+              this.operation = '修改';
+              bus.$emit('changed','添加后的是lisi');
+              break;
+            case '修改':
+              this.operation = '删除';
+              bus.$emit('changed','修改后是wangwu');
+              break;
+            case '删除':
+              this.operation = '添加';
+              bus.$emit('changed');
+              break;
+            default:
+              this.operation = '添加';
+              bus.$emit('changed');
+              break;
+          }
+        }
+      },
+    })
+  </script>
+  <script>
+    var bus = new Vue({})
+    var app = new Vue ({
+      el: '#app',
+      data () {
+        return {
+          showZongjie: false
+        }
+      },
+      // activated () {
+      //   console.log(111);
+      // },
+      methods: {
+        showzj () {
+          this.showZongjie = true;
+          let _this = this;
+          setTimeout ( function () {
+            _this.$destroy();
+          },5000)
+        }
+      }
+    }) 
+  </script>
+</body>
+</html>

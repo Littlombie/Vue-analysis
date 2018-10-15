@@ -24,10 +24,15 @@
   </script>
   <script type="text/template" id="btn-panel">
     <div class="btn">
-      <button @click="change">{{operation}}</button>
+      <button @click="change(operation)">{{operation}}</button>
     </div>
   </script>
   <script>
+    // 生成一个Map对象 
+    const BTN_OPER = new Map()
+          .set('添加', ['修改','添加后的是lisi'])
+          .set('修改', ['删除','修改后是wangwu'])
+          .set('删除', ['添加'])
     Vue.component('item-panel', {
       template: '#item-panel',
       data () {
@@ -104,25 +109,33 @@
         console.log(`${this.operation}--btn-destroyed`);
       },
       methods: {
-        change () {
-          switch (this.operation) {
-            case '添加':
-              this.operation = '修改';
-              bus.$emit('changed','添加后的是lisi');
-              break;
-            case '修改':
-              this.operation = '删除';
-              bus.$emit('changed','修改后是wangwu');
-              break;
-            case '删除':
-              this.operation = '添加';
-              bus.$emit('changed');
-              break;
-            default:
-              this.operation = '添加';
-              bus.$emit('changed');
-              break;
+        change (oper) {
+          // !BTN_OPER.get(oper)
+          if (!BTN_OPER.has(oper)) {
+            return;
+          } else {
+            this.operation = BTN_OPER.get(oper)[0];
+            // console.log('changed',BTN_OPER.get(oper)[1]);
+            bus.$emit('changed',BTN_OPER.get(oper)[1]);
           }
+          // switch (this.operation) {
+          //   case '添加':
+          //     this.operation = '修改';
+          //     bus.$emit('changed','添加后的是lisi');
+          //     break;
+          //   case '修改':
+          //     this.operation = '删除';
+          //     bus.$emit('changed','修改后是wangwu');
+          //     break;
+          //   case '删除':
+          //     this.operation = '添加';
+          //     bus.$emit('changed');
+          //     break;
+          //   default:
+          //     this.operation = '添加';
+          //     bus.$emit('changed');
+          //     break;
+          // }
         }
       },
     })

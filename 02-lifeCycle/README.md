@@ -107,6 +107,7 @@ activated & deactivated
 [Vue的钩子函数 [路由导航守卫、keep-alive、生命周期钩子]](https://juejin.im/post/5b41bdef6fb9a04fe63765f1)
 
 实例demo：
+ 见[`template`](/template/)
 <!-- 
 ![](https://files.jb51.net/file_images/article/201709/2017927151335093.png?2017827151357) -->
 参考文档：  
@@ -124,3 +125,6 @@ activated & deactivated
 
 * 兄弟组件通过bus传值时的updated，beforeUpdate 生命周期顺序
 * beforeCreate 有什么具体实际的用处，例举 
+
+
+

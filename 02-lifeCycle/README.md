@@ -107,7 +107,7 @@ activated & deactivated
 [Vue的钩子函数 [路由导航守卫、keep-alive、生命周期钩子]](https://juejin.im/post/5b41bdef6fb9a04fe63765f1)
 
 实例demo：
- 见[`template`](/template/)
+ 见[`template`](https://github.com/Littlombie/Vue-analysis/tree/master/02-lifeCycle/template)
 <!-- 
 ![](https://files.jb51.net/file_images/article/201709/2017927151335093.png?2017827151357) -->
 参考文档：  

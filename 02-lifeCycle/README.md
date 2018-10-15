@@ -39,6 +39,8 @@ render (h) {
 
 ### 生命周期的钩子 (lifecyclehook)
 
+Vue所有的生命周期钩子自动绑定在this上下文到实例中，因此你可以访问数据，对属性和方法进行运算。这意味着你不能使用箭头函数来定义一个生命周期方法。这是因为箭头函数绑定了父上下文，因此this与你期待的Vue实例不同。
+
 | 生命周期中的钩子函数 | 组建状态 | 最佳实践 |
 |-----|-----|-----|
 | beforeCreate | 实例初始化之后,this指向创建的实例，此时还不能访问到`data`,`computed`,`watch`,`methods`上的数据和方法 | 常用于初始化非响应式变量|
@@ -107,3 +109,18 @@ activated & deactivated
 实例demo：
 <!-- 
 ![](https://files.jb51.net/file_images/article/201709/2017927151335093.png?2017827151357) -->
+参考文档：  
+[如何解释vue的生命周期才能令面试官满意？](https://juejin.im/post/5ad10800f265da23826e681e?utm_medium=hao.caibaojian.com&utm_source=hao.caibaojian.com )  
+[vue生命周期（五）](http://blog.poetries.top/2018/08/26/vue-lifecircle/?utm_medium=hao.caibaojian.com&utm_source=hao.caibaojian.com)  
+[深入 Vue 生命周期](https://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&mid=2651555022&idx=1&sn=552856ad4af7bb9560217f6deec65270&chksm=8025530fb752da190830e52ca6a9b24d1e7440e1d6cccbfff6355f7583d4f4749400e541739e)  
+[Vue 实例中的生命周期钩子详解](https://segmentfault.com/a/1190000008771768?_ea=1739750)  
+[Vue.js源码解读](https://www.cnblogs.com/locim/p/8892738.html)  
+[生命周期](http://blog.51cto.com/9195095/1963227)
+[Vue的钩子函数[路由导航守卫、keep-alive、生命周期钩子]](https://juejin.im/post/5b41bdef6fb9a04fe63765f1)  
+[Vue生命周期中mounted和created的区别](https://blog.csdn.net/xdnloveme/article/details/78035065)  
+[深入理解Vue生命周期、手动挂载及挂载子组件](https://www.jb51.net/article/124737.htm)
+
+##### 遗留问题：
+
+* 兄弟组件通过bus传值时的updated，beforeUpdate 生命周期顺序
+* beforeCreate 有什么具体实际的用处，例举 

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>extends</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div id="app">
+    <module1></module1>
+    <module2></module2>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+<script type="text/template" id="module1">
+  <div class="module1">
+    {{name}}
+  </div>
+</script>
+<script type="text/template" id="module2">
+    <div class="module2">
+      {{name}}
+    </div>
+</script>
+<script>
+  Vue.component('module1', {
+    template: '#module1',
+    data () {
+      return {
+        name: 'lisi'
+      }
+    },
+    created() {
+      console.log(this.name);
+    },
+    beforeCreate() {
+      console.log('I am module1 beforeCreated');
+    },
+    created() {
+      console.log('I am module1 created');
+    },
+    beforeMount() {
+      console.log('I am module1 beforeMount');
+    },
+    mounted() {
+      console.log('I am module1 mounted');
+    }
+  })
+
+  Vue.component('module2', {
+    template: '#module2',
+    extends: 'module1',
+    data () {
+      return {
+        name: 'module2'
+      }
+    },
+    created() {
+      console.log('module2',this.name);
+    },
+    beforeCreate() {
+      console.log('I am module2 beforeCreated');
+    },
+    created() {
+      console.log('I am module2 created');
+    },
+    beforeMount() {
+      console.log('I am module2 beforeMount');
+    },
+    mounted() {
+      console.log('I am module2 mounted');
+    }
+  })
+</script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        name: '张三'
+      }
+    },
+    created() {
+      console.log(this.name);
+    },
+    beforeCreate() {
+      console.log('I am parents beforeCreated');
+    },
+    created() {
+      console.log('I am parents created');
+    },
+    beforeMount() {
+      console.log('I am parents beforeMount');
+    },
+    mounted() {
+      console.log('I am parents mounted');
+    }
+  })
+</script>
+
+</html>

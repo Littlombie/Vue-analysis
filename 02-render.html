@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="app">
+    <tep-render :level='levels'>
+      <p>Hello Vue</p><span> Hello World!</span>
+      <a href="https://blog.csdn.net/baidu_38492440/article/details/76407865">查看参考</a>
+    </tep-render>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js" target="_block"></script>
+  <script type="text/template" id="render-tep">
+  </script>
+  <script>
+    Vue.component('tepRender', {
+      template: '#render-tep',
+      render: function (createElement) {
+        console.log(this.$slots.default);
+        return createElement(
+          'h' + this.level, //tag name 
+          {
+            // 和`v-bind:class`一样的 API
+            'class': {
+              foo: true,
+              bar: false
+            },
+            // 和`v-bind:style`一样的 API
+            style: {
+              color: 'red',
+              fontSize: '14px'
+            },
+            // 正常的 HTML 特性
+            attrs: {
+              id: 'foo'
+            },
+            // 组件 props
+            props: {
+              myProp: 'bar'
+            },
+            // DOM 属性
+            domProps: {
+              innerHTML: 'baz'
+            },
+            // 事件监听器基于 "on"
+            // 所以不再支持如 v-on:keyup.enter 修饰器
+            // 需要手动匹配 keyCode。
+            on: {
+              click: this.clickHandler
+            },
+            // 仅对于组件，用于监听原生事件，而不是组件使用 vm.$emit 触发的事件。
+            nativeOn: {
+              click: this.nativeClickHandler
+            },
+            // 自定义指令. 注意事项：不能对绑定的旧值设值
+            // Vue 会为您持续追踨
+            directives: [
+              {
+                name: 'my-custom-directive',
+                value: '2',
+                expression: '1 + 1',
+                arg: 'foo',
+                modifiers: {
+                  bar: true
+                }
+              }
+            ],
+            // 如果子组件有定义 slot 的名称
+            slot: 'name-of-slot',
+            // 其他特殊顶层属性
+            key: 'myKey',
+            ref: 'myRef'
+          },
+          this.$slots.default // <slot>分发 多个节点的 数组  子组件中的阵列
+          // 用来访问被 slot 分发的内容。每个具名 slot 有其相应的属性（例如：slot="foo" 中的内容将会在
+           //vm.$slots.foo 中被找到）。default 属性包括了所有没有被包含在一个具名 slot 中的节点。
+           //在使用 render 函数书写一个组件时，访问 vm.$slots 最有帮助。
+        )
+      },
+      props: {
+        level:{
+          type: Number,
+          default: 1,
+          required: true
+        }
+      }
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data () {
+        return {
+          levels: 5
+        }
+      }
+    })
+  </script>
+  </body>
+</html>

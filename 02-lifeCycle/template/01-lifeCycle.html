@@ -25,6 +25,7 @@
         },
         beforeCreate() {
             this.compName = 'single'
+            console.log(`this.$options.data()["dataVar"]:${this.$options.data()["dataVar"]}`);
             console.log(`--${this.compName}--beforeCreate`)
             console.log(`--${this.dataVar}--beforeCreate`)
             console.log(`${this.$refs.btns.innerText}`);

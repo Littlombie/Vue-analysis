@@ -123,8 +123,38 @@ activated & deactivated
 
 ##### 遗留问题：
 
-* 兄弟组件通过bus传值时的updated，beforeUpdate 生命周期顺序
-* beforeCreate 有什么具体实际的用处，例举 
+* 兄弟组件通过bus传值时的updated，beforeUpdate 生命周期顺序  
+ 如果是通过父级派发更新事件时，beforeUpdate，和updated的顺序 都是自上到下正常顺序进行；  
+ 如果是兄弟组件的派发顺序是beforeUpdate是从上到下，updated 的顺序是从下到上的更新顺序
 
+* beforeCreate 有什么具体实际的用处，例举   
+  vue生命周期中 beforeCreate 是实例初始化完成后数据观测（data observer）和event/watcher之前被调用。 
 
+  在beforeCreate前，所有的options都会先存到vm.$options中，在beforeCreate之后，将$options里的data啦，props啦，methods啦等等一个个附到vm上，然后再触发created钩子。所以在beforeCreate的时候，通过this.message是拿不到值的，在created的时候就能通过this.message拿到值了。
+
+  一定要在beforeCreate的时候就同步去拿data里的值的话，就是直接从this.$options.data里去拿。如果data中的初始值是简单的string，那直接this.$options.data()["message"]就好.涉及到复杂点的情况，建议看看源码里是怎么处理的，具体在core/instance/state.js中的initData(vm)里。
+  还有一种方法 可以使用nextTick()，相当于做个延迟，等页面挂载完后在执行
+  使用promise
+  ``` javascript
+  let F = null;
+  export default {
+      //...
+      data(){
+          return {
+              dataList:[]
+          }
+      },
+      beforeCreate() {
+          F = fetchData(//fetchData是取数方法
+              //...返回promise
+          )
+      },
+      created() {
+          F.then(data=>{
+              this.dataList = data
+          })
+      }
+  }
+  ```
+  本人理解其中原因就是一个实例初始化后的提示功能，表示此后要开始
 

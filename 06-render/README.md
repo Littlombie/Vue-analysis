@@ -9,10 +9,14 @@
 
 [渲染函数](https://cn.vuejs.org/v2/guide/render-function.html)
 
+### 什么是render函数
 
->在之前的Vue1.X版本中没有 Virtual DOM ,2.0添加了此功能， 所以有了render 函数
+VUE推荐在绝大多数情况下使用template来创建我们的HTML。然而在一些场景中，我们真的需要JavaScript的完全编程的能力，这就是render函数，它比template更接近编译器。
+
+>在之前的Vue1.X版本中没有Virtual DOM,Vue2.0之后添加了此功能，而Virtual DOM 最后是通过`render`函数来生成模板页面
 
 vue  在new Vue()最后的渲染只认render 函数 所有的东西 html,template 都会编译成render函数
+
 编译相关的代码都在 compiler文件中
 
 core/instance / render.js -render.js中
@@ -92,7 +96,6 @@ Vue.prototype._render = function (): VNode {
   return vnode
 }
 ```
-
 这段代码最关键的是 `render` 方法的调用，我们在平时的开发工作中手写 `render` 方法的场景比较少，而写的比较多的是 `template` 模板，在之前的 mounted 方法的实现中，会把 `template` 编译成 `render` 方法，但这个编译过程是非常复杂的，我们不打算在这里展开讲，之后会专门花一个章节来分析 `Vue` 的编译过程。  
 
 在 Vue 的官方文档中介绍了 `render` 函数的第一个参数是 `createElement`，那么结合之前的例子：
@@ -135,4 +138,18 @@ export function initRender (vm: Component) {
 
 # 总结
 
+
+1. render方法的实质就是生成template模板； 
+2. 通过调用一个方法来生成，而这个方法是通过render方法的参数传递给它的； 
+3. 这个方法有三个参数，分别提供标签名，标签相关属性，标签内部的html内容 
+4. 通过这三个参数，可以生成一个完整的木模板  
+
+备注：
+render方法可以使用JSX语法，但需要Babel plugin插件；
+render方法里的第三个参数可以使用函数来生成多个组件（特别是如果他们相同的话），只要生成结果是一个数组，且数组元素都是VNode即可；  
+
+注意： 
+render函数室友限制的，Vue.js 2.X支持，但是1.X无法使用。
+
 `vm._render `最终是通过执行 `createElement` 方法并返回的是 `vnode`，它是一个虚拟 `Node`。Vue 2.0 相比 Vue 1.0 最大的升级就是利用了 `Virtual DOM`。因此在分析 `createElement` 的实现前，我们先了解一下 `Virtual DOM` 的概念。
+

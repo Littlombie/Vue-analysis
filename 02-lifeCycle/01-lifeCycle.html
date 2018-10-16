@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>vue 生命周期</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+</head>
+<body>
+    <div id="App">
+        <div>
+            <h3>单组件</h3>
+            <button @click="dataVar += 1" ref="btns">更新 {{dataVar}}</button>
+            <button @click="handleDestroy" >销毁</button>
+        </div>
+    </div>
+   <script>
+      new Vue({
+        el: '#App',
+        data () {
+            return {
+                dataVar: 1
+            }
+        },
+        beforeCreate() {
+            this.compName = 'single'
+            console.log(`this.$options.data()["dataVar"]:${this.$options.data()["dataVar"]}`);
+            console.log(`--${this.compName}--beforeCreate`)
+            console.log(`--${this.dataVar}--beforeCreate`)
+            console.log(`${this.$refs.btns.innerText}`);
+        },
+        created() {
+            console.log(`--${this.compName}--created`)
+            console.log(`--${this.dataVar}--created`)
+            console.log(`${this.$refs.btns.innerText}`);
+        },
+        beforeMount() {
+            console.log(`--${this.compName}--beforeMount`)
+            console.log(`--${this.dataVar}--beforeMount`)
+            console.log(`${this.$refs.btns.innerText}`);
+        },
+        mounted() {
+            console.log(`--${this.compName}--mounted`)
+            console.log(`--${this.dataVar}--mounted`)
+            console.log(`${this.$refs.btns.innerText}`);
+        },
+        beforeUpdate() {
+            console.log(`--${this.compName}--beforeUpdate`)
+            console.log(`--${this.dataVar}--beforeUpdate`)
+        },
+        updated() {
+            console.log(`--${this.compName}--updated`)
+            console.log(`--${this.dataVar}--updated`)
+        },
+        beforeDestroy() {
+            console.log(`--${this.compName}--beforeDestroy`)
+            console.log(`--${this.dataVar}--beforeDestroy`)
+        },
+        destroyed() {
+            console.log(`--${this.compName}--destroyed`)
+            console.log(`--${this.dataVar}--destroyed`)
+        },
+        methods: {
+            handleDestroy() {
+                this.$destroy()
+            }
+        }
+    })
+   </script>
+</body>
+</html>

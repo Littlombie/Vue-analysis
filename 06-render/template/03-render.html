@@ -5,20 +5,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    .btn {
+      display: block;
+      width: 100px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075);
+    }
+    .success {    background-image: -webkit-linear-gradient(top,#5cb85c 0,#419641 100%);
+    background-image: -o-linear-gradient(top,#5cb85c 0,#419641 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#419641));
+    background-image: linear-gradient(to bottom,#5cb85c 0,#419641 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff419641', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-color: #3e8f3e;}
+    .errors {    background-image: -webkit-linear-gradient(top,#d9534f 0,#c12e2a 100%);
+    background-image: -o-linear-gradient(top,#d9534f 0,#c12e2a 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#c12e2a));
+    background-image: linear-gradient(to bottom,#d9534f 0,#c12e2a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f', endColorstr='#ffc12e2a', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-color: #b92c28;
+}
+    .warm {    background-image: -webkit-linear-gradient(top,#f0ad4e 0,#eb9316 100%);
+    background-image: -o-linear-gradient(top,#f0ad4e 0,#eb9316 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#f0ad4e),to(#eb9316));
+    background-image: linear-gradient(to bottom,#f0ad4e 0,#eb9316 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff0ad4e', endColorstr='#ffeb9316', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-color: #e38d13;}
+    .default {background-image: -webkit-linear-gradient(top,#5bc0de 0,#2aabd2 100%);
+    background-image: -o-linear-gradient(top,#5bc0de 0,#2aabd2 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#5bc0de),to(#2aabd2));
+    background-image: linear-gradient(to bottom,#5bc0de 0,#2aabd2 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2aabd2', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-color: #28a4c9;}
+  </style>
 </head>
 <body>
   <div id="app">
-    {{name}}
+    <render-template v-for="(btn, index) in testData" :type="btn.type" :names="btn.name" :text="btn.text" :key="index" v-text="btn.text">  </render-template>
   </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js" target="_block"></script>
+    <script type="text/template" id="render-template"></script>
     <script>
-      
-
+      Vue.component('render-template', {
+        tempalte: '#render-template',
+        render(h) {
+          return h('div', {
+            'class': {
+              btn: true,
+              success: this.type === "success",
+              errors: this.type === "errors",
+              warm: this.type === "warm",
+              default: this.type === "default"
+            },
+            domProps: {
+              innerHTML: this.$slots.default
+              // innerHTML: this.$slots.default[0].text
+            },
+            on: {
+              click: this.clickHandle
+            }
+          })
+        },
+        methods: {
+          clickHandle () {
+            console.log(this.names);
+          }
+        },
+        props: {
+          type: {
+            type: String,
+            default: 'default'
+          },
+          names: {
+            type: String,
+            default: 'lisi'
+          },
+          text: {
+            type: String,
+            default: 'default'
+          }
+        }
+      })
       var vm = new Vue({
         el:'#app',
         data () {
           return {
-            name: 'This is Render Function'
+            testData: [
+            //   {
+            //   type: 'errors',
+            //   text:'errors',
+            //   name: 'zhangsan'
+            // },
+            {
+              type: 'success',
+              text:'success',
+              name: 'lisi'
+            },
+            // {
+            //   type: 'warm',
+            //   text: 'warm',
+            //   name: 'wangwu'
+            // },
+            // {
+            //   type: 'default',
+            //   text: 'default',
+            //   name: 'zhaoliu'
+            // }
+            ]
           }
         }
       }) 

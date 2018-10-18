@@ -21,7 +21,6 @@ vue  在new Vue()最后的渲染只认render 函数 所有的东西 html,templat
 
 core/instance / render.js -render.js中
 
-
 observe - 响应式
 _ 在js中默认为是定义的私有属性 ，建议不要多次访问 
 

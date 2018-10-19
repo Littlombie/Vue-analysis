@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>render 函数</title>
   <style>
     .btn {
       display: block;
@@ -54,82 +55,129 @@
     border-color: #28a4c9;}
   </style>
 </head>
+
 <body>
   <div id="app">
-    <render-template v-for="(btn, index) in testData" :type="btn.type" :names="btn.name" :text="btn.text" :key="index" v-text="btn.text">  </render-template>
+    <render-template   :datas="testData"  >{{testData.text}}</render-template>
+    <button @click="changeBtn">改变</button>
   </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js" target="_block"></script>
-    <script type="text/template" id="render-template"></script>
-    <script>
-      Vue.component('render-template', {
-        tempalte: '#render-template',
-        render(h) {
-          return h('div', {
-            'class': {
-              btn: true,
-              success: this.type === "success",
-              errors: this.type === "errors",
-              warm: this.type === "warm",
-              default: this.type === "default"
-            },
-            domProps: {
-              innerHTML: this.$slots.default
-              // innerHTML: this.$slots.default[0].text
-            },
-            on: {
-              click: this.clickHandle
-            }
-          })
-        },
-        methods: {
-          clickHandle () {
-            console.log(this.names);
-          }
-        },
-        props: {
-          type: {
-            type: String,
-            default: 'default'
-          },
-          names: {
-            type: String,
-            default: 'lisi'
-          },
-          text: {
-            type: String,
-            default: 'default'
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js" target="_block"></script>
+  <script type="text/template" id="render-template"></script>
+  <script>
+    const datass = [
+      {
+        type: 'default',
+        text: 'default',
+        name: 'Default'
+      },
+      {
+        type: 'success',
+        text: 'success',
+        name: 'Success'
+      },
+      {
+        type: 'warm',
+        text: 'warm',
+        name: 'Warm'
+      },
+      {
+        type: 'errors',
+        text:'errors',
+        name: 'Errors'
+      }
+    ]
+    Vue.component('render-template', {
+      tempalte: '#render-template',
+      props: {
+        datas: {
+          type: Array,
+          required: true,
+          default: {
+            type: 'default',
+            name: 'lisi',
+            text: 'default'
           }
         }
-      })
-      var vm = new Vue({
-        el:'#app',
-        data () {
-          return {
-            testData: [
-            //   {
-            //   type: 'errors',
-            //   text:'errors',
-            //   name: 'zhangsan'
-            // },
-            {
-              type: 'success',
-              text:'success',
-              name: 'lisi'
-            },
-            // {
-            //   type: 'warm',
-            //   text: 'warm',
-            //   name: 'wangwu'
-            // },
-            // {
-            //   type: 'default',
-            //   text: 'default',
-            //   name: 'zhaoliu'
-            // }
-            ]
+      },
+      render(h) {
+        return h('div', {
+          'class': {
+            btn: true,
+            success: this.newDatas.type === "success",
+            errors: this.newDatas.type === "errors",
+            warm: this.newDatas.type === "warm",
+            default: this.newDatas.type === "default"
+          },
+          // 组件props
+          props: {
+            name: 'zhangsa'
+          },
+          // DOM属性
+          domProps: {
+            innerHTML: this.newDatas.text
+            // innerHTML: this.$slots.default[0].text
+          },
+          // 事件监听基于 'on'
+          // 所以不再支持如 'v-on:keyup.enter' 修饰语
+          // 需要手动匹配 KeyCode
+          on: {
+            click: this.clickHandle
           }
+        })
+      },
+      created() {
+        console.log(this.domProps);
+        console.log(this.datas);
+        console.log(this.$slots);
+      },
+      computed: {
+        newDatas () {
+          return  this.datas
+          // {
+          //   type: this.datas.type,
+          //   text: this.datas.text,
+          //   name: this.datas.name,
+          // }
         }
-      }) 
-    </script>
+      },
+      methods: {
+        clickHandle() {
+          console.log(this.newDatas.name);
+        }
+      }
+    })
+    var vm = new Vue({
+      el: '#app',
+      data() {
+        return {
+          testData: [],
+          index:0
+        }
+      },
+      created () {
+        // this.testData = datass[this.index];
+        this.changeBtn ()
+        console.log(this.testData);
+      },
+      methods : {
+        changeBtn () {
+          if (this.index === datass.length) {
+            return
+          }
+          this.testData = datass[this.index];
+          this.index++;
+          console.log('ssss',this.testData);
+        }
+      }
+    }) 
+  </script>
 </body>
+
 </html>
+<!-- https://blog.csdn.net/wngzhem/article/details/54291024 -->
+<!-- https://www.cnblogs.com/tugenhua0707/p/7528621.html -->
+<!-- https://blog.csdn.net/weixin_42229553/article/details/80444919 -->
+<!-- https://www.jb51.net/article/122424.htm -->
+<!-- https://www.cnblogs.com/tugenhua0707/p/7528621.html -->
+<!-- https://www.cnblogs.com/leungUwah/p/6921873.html -->
+<!-- http://www.alloyteam.com/2017/07/12918/ -->

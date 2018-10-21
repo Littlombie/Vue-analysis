@@ -21,17 +21,17 @@
     Vue.component('mycom', {
       render: function (createElement) {
           var _this = this;
-          var ars = createElement('input', {
+          var inps = createElement('input', {
             domProps: {
               value: _this.v
             },
             on: {
               input: function (event) {
-                // _this.$emit
+                _this.$emit('input',event.target.value)
               }
             }
           })
-          return createElement('li', [ars])
+          return createElement('div', [inps])
       },
       props: {
         v: {
@@ -56,12 +56,13 @@
     var app = new Vue({
       el: '#app',
       data: {
-        num: 2,
+        num: 1020,
         arr: [1, 2, 3, 4, 5, 6, 7, 8]
       },
       methods: {
-        updateValue () {
-          this.num=parseFloat(value);
+        updateValue (value) {
+          console.log(value);
+          this.num = value;
         }
       }
     })

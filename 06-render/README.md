@@ -152,3 +152,10 @@ render函数室友限制的，Vue.js 2.X支持，但是1.X无法使用。
 
 `vm._render `最终是通过执行 `createElement` 方法并返回的是 `vnode`，它是一个虚拟 `Node`。Vue 2.0 相比 Vue 1.0 最大的升级就是利用了 `Virtual DOM`。因此在分析 `createElement` 的实现前，我们先了解一下 `Virtual DOM` 的概念。
 
+### [参考博客]
+[vue Render函数进阶](https://blog.csdn.net/wngzhem/article/details/54291024)  
+[理解Vue中的Render渲染函数](https://www.cnblogs.com/tugenhua0707/p/7528621.html)  
+[(一) Vue基础个人总结，条件渲染，列表渲染，组件等](https://blog.csdn.net/weixin_42229553/article/details/80444919  )  
+[如何理解Vue的render函数的具体用法](https://www.jb51.net/article/122424.htm )   
+[Vue2.x中的Render函数](https://www.cnblogs.com/leungUwah/p/6921873.html )   
+[用jsx写vue组件](http://www.alloyteam.com/2017/07/12918/)

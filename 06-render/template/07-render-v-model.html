@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>render v-model</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div id="app">
+      {{num}}
+    <mycom :v="num" :ar="arr"  @input="updateValue">
+      <div slot="slot2">张三</div>
+      <div slot="slot1">李四</div>
+    </mycom>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+  <script>
+    Vue.component('mycom', {
+      render: function (createElement) {
+          var _this = this;
+          var ars = createElement('input', {
+            domProps: {
+              value: _this.v
+            },
+            on: {
+              input: function (event) {
+                // _this.$emit
+              }
+            }
+          })
+          return createElement('li', [ars])
+      },
+      props: {
+        v: {
+          type: Number,
+          default: 0
+        },
+        n: {
+          default: 'hello'
+        },
+        ar: {
+          type: Array,
+          default: function () {
+            return [1, 23, 4, 5, 6, 55, 65]
+          }
+        }
+
+      },
+      methods: {
+
+      }
+    });
+    var app = new Vue({
+      el: '#app',
+      data: {
+        num: 2,
+        arr: [1, 2, 3, 4, 5, 6, 7, 8]
+      },
+      methods: {
+        updateValue () {
+          this.num=parseFloat(value);
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

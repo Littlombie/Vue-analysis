@@ -10,7 +10,7 @@
 
 <body>
   <div id="app">
-      {{num}}
+     <p contenteditable="true">{{num}}</p> 
     <mycom :v="num" :ar="arr"  @input="updateValue">
       <div slot="slot2">张三</div>
       <div slot="slot1">李四</div>
@@ -23,7 +23,7 @@
           var _this = this;
           var inps = createElement('input', {
             domProps: {
-              value: _this.v
+              value: _this.newV
             },
             on: {
               input: function (event) {
@@ -49,6 +49,21 @@
         }
 
       },
+      data: {
+        newV: 0
+      },
+      // computed: {
+      //   newV () {
+      //     return this.v 
+      //   }
+      // },
+      watch: {
+        v(n,o) {
+          console.log('sss');
+          this.newV = n;
+          immediate: true
+        }
+      },
       methods: {
 
       }
@@ -61,7 +76,6 @@
       },
       methods: {
         updateValue (value) {
-          console.log(value);
           this.num = value;
         }
       }

@@ -9,36 +9,75 @@
 
 [渲染函数](https://cn.vuejs.org/v2/guide/render-function.html)
 
+web页面渲染分四种方式  
+* 后端模板渲染
+* 客户端渲染
+* node中间层
+* 服务端渲染（ssr）
+
 ### 什么是render函数
+
+Render函数是Vue2.x版本新增的一个函数；使用虚拟dom来渲染节点提升性能，因为它是基于JavaScript计算。通过使用createElement(h)来创建dom节点。createElement是render的核心方法。其Vue编译的时候会把template里面的节点解析成虚拟dom；
 
 VUE推荐在绝大多数情况下使用template来创建我们的HTML。然而在一些场景中，我们真的需要JavaScript的完全编程的能力，这就是render函数，它比template更接近编译器。
 
 >在之前的Vue1.X版本中没有Virtual DOM,Vue2.0之后添加了此功能，而Virtual DOM 最后是通过`render`函数来生成模板页面
 
-vue  在new Vue()最后的渲染只认render 函数 所有的东西 html,template 都会编译成render函数
+vue  在new Vue()最后的渲染只认render 函数 所有的东西 html,template 都会编译成render函数  
+demo：  
+```
+render (h) {
+  return h('div', {}, this.text)
+}
+```
+`render`函数里面的传参h就是Vue里面的`createElement`方法，`return`返回一个`createElement`方法，其中要传3个参数，第一个参数就是创建的div标签；第二个参数传了一个对象，对象里面可以是我们组件上面的props，或者是事件之类的东西；第三个参数就是div标签里面的内容，这里我们指向了data里面的text。  
+
+使用render函数的结果和我们之前使用`template`解析出来的结果是一样的。`render`函数是发生在`beforeMount`和`mounted`之间的，这也从侧面说明了，在`beforeMount`的时候，`$el`还只是我们在HTML里面写的节点，然后到`mounted`的时候，它就把渲染出来的内容挂载到了`DOM`节点上。这中间的过程其实是执行了`render function`的内容。    
+
+在使用`.vue`文件开发的过程当中，我们在里面写了`template`模板，在经过了`vue-loader`的处理之后，就变成了`render function`，最终放到了`vue-loader`解析过的文件里面。这样做有什么好处呢？原因是由于在解析`template`变成`render function`的过程，是一个非常耗时的过程，`vue-loader`帮我们处理了这些内容之后，当我们在页面上执行`vue`代码的时候，效率会变得更高。  
+
+之前的实例可以改为render 写法
+``` javascript
+var vm = new Vue({
+  el: '#app',
+  render (createElement) {
+    return createElement('div', {
+      attrs: {
+        id: 'app'
+      }
+    }, this.message)
+  },
+  data () {
+    return message: 'Hello Vue!'
+  }
+}) 
+```
+上边代码最后显示出来 跟之前 那种是一样的效果 
+
+### 源码分析
 
 编译相关的代码都在 compiler文件中
 
-core/instance / render.js -render.js中
+core/instance / render.js 中
 
 observe - 响应式
 _ 在js中默认为是定义的私有属性 ，建议不要多次访问 
 
-
 (视频2-5， 2-6)
 platform/util/index.js  判断是否是render 还是template
 
-new watcher() 渲染 watcher (observer/watcher.js )
+new watcher() 渲染 watcher (observer/watcher.js ) 
 
-### 源码分析
+#
 
 Vue 的 _render 方法是实例的一个私有方法，它用来把实例渲染成一个虚拟 Node。它的定义在 src/core/instance/render.js 文件中：
 ```javascript
+//再次定义一个render私有方法  返回一个vnode，通过vm.$options拿到render函数
 Vue.prototype._render = function (): VNode {
   const vm: Component = this
   const { render, _parentVnode } = vm.$options 
 
-  // reset _rendered flag on slots for duplicate slot check
+  // 复位_render标志在插槽上用于重复的插槽检查
   if (process.env.NODE_ENV !== 'production') {
     for (const key in vm.$slots) {
       // $flow-disable-line
@@ -50,17 +89,17 @@ Vue.prototype._render = function (): VNode {
     vm.$scopedSlots = _parentVnode.data.scopedSlots || emptyObject
   }
 
-  // set parent vnode. this allows render functions to have access
-  // to the data on the placeholder node.
+  // 设置父vnode。这允许呈现函数访问占位符节点上的数据。
   vm.$vnode = _parentVnode
   // render self
   let vnode
   try {
+    //利用call的方法 参数一当前上下文，vm._renderProxy再生产环境下 就是vm，也就是this 本身，开发环境是一个proxy 对象
     vnode = render.call(vm._renderProxy, vm.$createElement)
   } catch (e) {
     handleError(e, vm, `render`)
-    // return error render result,
-    // or previous vnode to prevent render error causing blank component
+    // 返回错误呈现结果，
+    // 或先前的vnode，以防止呈现错误导致空白组件
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
       if (vm.$options.renderError) {
@@ -79,7 +118,7 @@ Vue.prototype._render = function (): VNode {
 	}
 	
 	// 上边 会返回一个 vnode ， $options 这个函数可以自己写 ，也可以通过编译生成
-  // return empty vnode in case the render function errored out
+  // 如果呈现函数出错，返回空vnode
   if (!(vnode instanceof VNode)) {
     if (process.env.NODE_ENV !== 'production' && Array.isArray(vnode)) {
       warn(
@@ -123,13 +162,12 @@ vnode = render.call(vm._renderProxy, vm.$createElement)
 ```javascript
 export function initRender (vm: Component) {
   // ...
-  // bind the createElement fn to this instance
-  // so that we get proper render context inside it.
-  // args order: tag, data, children, normalizationType, alwaysNormalize
-  // internal version is used by render functions compiled from templates
+  //将createElement fn绑定到这个实例，这样我们就可以在其中获得适当的呈现上下文。
+  // args顺序:标签、数据、子元素、normalizationType、alwaysNormalize内部版本由模板编译的呈现函数使用
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
-  // normalization is always applied for the public version, used in
-  // user-written render functions.
+  //规范化通常应用于公共版本，用于用户编写的呈现函数。
+
+  //手写render函数 创建的方法
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 }
 ```

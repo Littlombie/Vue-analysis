@@ -44,8 +44,8 @@ render (h) {
 
 其中可以传三个参数：
 * 第一个参数 {String | Object | Function} 表示可以传一个 HTML 标签字符串，组件选项对象，或者解析上述任何一种的一个 async 异步函数。必需参数；
-* 第二个参数 {Object} 一个包含模板相关属性的数据对象，对象里面可以是我们组件上面的props，或者是事件之类的东西，你可以在 template 中使用这些特性。可选参数；
-  data的对象
+* 第二个参数 {Object} 一个包含模板相关属性的数据对象，对象里面可以是我们组件上面的props，或者是事件之类的东西，你可以在 template 中使用这些特性。可选参数；  
+  data的对象：
   ``` javascript
     {
     // 和`v-bind:class`一样的 API
@@ -129,25 +129,6 @@ render (h) {
 在使用`.vue`文件开发的过程当中，我们在里面写了`template`模板，在经过了`vue-loader`的处理之后，就变成了`render function`，最终放到了`vue-loader`解析过的文件里面。这样做有什么好处呢？原因是由于在解析`template`变成`render function`的过程，是一个非常耗时的过程，`vue-loader`帮我们处理了这些内容之后，当我们在页面上执行`vue`代码的时候，效率会变得更高。  
 
 
-
-之前的实例可以改为render 写法
-``` javascript
-var vm = new Vue({
-  el: '#app',
-  render (createElement) {
-    return createElement('div', {
-      attrs: {
-        id: 'app'
-      }
-    }, this.message)
-  },
-  data () {
-    return message: 'Hello Vue!'
-  }
-}) 
-```
-上边代码最后显示出来 跟之前 那种是一样的效果 
-
 ### 源码分析
 
 编译相关的代码都在 compiler文件中
@@ -166,7 +147,7 @@ new watcher() 渲染 watcher (observer/watcher.js )
 
 Vue 的 _render 方法是实例的一个私有方法，它用来把实例渲染成一个虚拟 Node。它的定义在 src/core/instance/render.js 文件中：
 ```javascript
-//再次定义一个render私有方法  返回一个vnode，通过vm.$options拿到render函数
+//再此定义一个render私有方法  返回一个vnode，通过vm.$options拿到render函数
 Vue.prototype._render = function (): VNode {
   const vm: Component = this
   const { render, _parentVnode } = vm.$options 
@@ -209,9 +190,9 @@ Vue.prototype._render = function (): VNode {
     } else {
       vnode = vm._vnode
     }
-	}
-	
-	// 上边 会返回一个 vnode ， $options 这个函数可以自己写 ，也可以通过编译生成
+  }
+
+  // 上边 会返回一个 vnode ， $options 这个函数可以自己写 ，也可以通过编译生成
   // 如果呈现函数出错，返回空vnode
   if (!(vnode instanceof VNode)) {
     if (process.env.NODE_ENV !== 'production' && Array.isArray(vnode)) {
@@ -239,13 +220,19 @@ Vue.prototype._render = function (): VNode {
 ```
 相当于我们编写如下 `render` 函数：
 ``` javascript
-render: function (createElement) {
-  return createElement('div', {
-     attrs: {
+var vm = new Vue({
+  el: '#app',
+  render (createElement) {
+    return createElement('div', {
+      attrs: {
         id: 'app'
-      },
-  }, this.message)
-}
+      }
+    }, this.message)
+  },
+  data () {
+    return message: 'Hello Vue!'
+  }
+}) 
 ```
 再回到 `_render` 函数中的 `render `方法的调用：
 
@@ -260,7 +247,6 @@ export function initRender (vm: Component) {
   // args顺序:标签、数据、子元素、normalizationType、alwaysNormalize内部版本由模板编译的呈现函数使用
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   //规范化通常应用于公共版本，用于用户编写的呈现函数。
-
   //手写render函数 创建的方法
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 }
@@ -273,7 +259,7 @@ export function initRender (vm: Component) {
 1. render方法的实质就是生成template模板； 
 2. 通过调用一个方法来生成，而这个方法是通过render方法的参数传递给它的； 
 3. 这个方法有三个参数，分别提供标签名，标签相关属性，标签内部的html内容 
-4. 通过这三个参数，可以生成一个完整的木模板  
+4. 通过这三个参数，可以生成一个完整的模板  
 
 备注：
 render方法可以使用JSX语法，但需要Babel plugin插件；

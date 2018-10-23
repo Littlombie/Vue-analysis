@@ -36,7 +36,8 @@
             },
             // 正常的 HTML 特性
             attrs: {
-              id: 'foo'
+              id: 'foo',
+              name: 'foo-' + this.level
             },
             // 组件 props
             props: {
@@ -86,6 +87,14 @@
           type: Number,
           default: 1,
           required: true
+        }
+      },
+      created() {
+        console.log(this.$refs);
+      },
+      methods: {
+        clickHandler () {
+          console.log('hahahah');
         }
       }
     })

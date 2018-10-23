@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>render</title>
+</head>
+
+<body>
+  <div id="app">
+    <anchored-heading :level="level">
+    <p slot="slot1">name</p>
+    </anchored-heading>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
+  <script>
+    var getChildrenTextContent = function (children) {
+      // console.log(children)
+      return children.map(function (node) {
+        return node.children ?
+          getChildrenTextContent(node.children) :
+          node.text
+      }).join('')
+    }
+
+    Vue.component('anchored-heading', {
+      render: function (createElement) {
+        // 创建 kebab-case 风格的ID
+        var headingId = getChildrenTextContent(this.$slots.default)
+          .toLowerCase()
+          .replace(/\W+/g, '-')
+          .replace(/(^\-|\-$)/g, '')
+
+        return createElement(
+          'h' + this.level,
+          [
+            createElement('a', {
+              attrs: {
+                name: headingId,
+                href: '#' + headingId
+              },
+              slot:'slot1'
+            }, this.$slots.default)
+          ]
+        )
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true
+        }
+      }
+    })
+    var vm = new Vue({
+      el: '#app',
+      data() {
+        return level = 2;
+      }
+    })
+  </script>
+</body>
+
+</html>

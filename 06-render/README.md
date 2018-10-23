@@ -10,31 +10,125 @@
 [渲染函数](https://cn.vuejs.org/v2/guide/render-function.html)
 
 web页面渲染分四种方式  
-* 后端模板渲染
-* 客户端渲染
-* node中间层
-* 服务端渲染（ssr）
+* 后端模板渲染： 
+  * 指使用PHP等后端语言来生成页面，通常情况下，需要后端配合，混合项目开发。以前项目都这样搞，缺点大于优点
+* 客户端渲染：
+  * 指使用 JS 来渲染页面大部分内容，后端资源都是通过ajax请求数据来渲染。代表是现在流行的 SPA 单页面应用；
+* node中间层：
+  * 前后端分离，但优于前端直接请求接口从而产生的一系列问题。 比如可以用PHP写后端简单的接口，Node.js封装PHP接口，前端axios请求封装后的接口，将需要的数据返回到对应的view层页面，既解决了跨域问题（Node.js作为服务端，服务端没有跨域一说），同时又不需要配后端环境，只需要一个PHP接口 [详细说明](https://segmentfault.com/a/1190000012950302)
+* 服务端渲染（ssr）：
+  *  主要指的是ssr，在准确点说就是「同构渲染」指前后端共用 JS，首次渲染时使用 Node.js 来直出 HTML。一般来说同构渲染是介于前后端中的共有部分。
+
 
 ### 什么是render函数
 
 Render函数是Vue2.x版本新增的一个函数；使用虚拟dom来渲染节点提升性能，因为它是基于JavaScript计算。通过使用createElement(h)来创建dom节点。createElement是render的核心方法。其Vue编译的时候会把template里面的节点解析成虚拟dom；
 
-VUE推荐在绝大多数情况下使用template来创建我们的HTML。然而在一些场景中，我们真的需要JavaScript的完全编程的能力，这就是render函数，它比template更接近编译器。
+vue推荐在绝大多数情况下使用template来创建我们的HTML。然而在一些场景中，我们真的需要JavaScript的完全编程的能力，这就是render函数，它比template更接近编译器。
 
->在之前的Vue1.X版本中没有Virtual DOM,Vue2.0之后添加了此功能，而Virtual DOM 最后是通过`render`函数来生成模板页面
+./template/demo1
 
+>在之前的Vue1.X版本中没有Virtual DOM,Vue2.0之后添加了此功能，而Virtual DOM 最后是通过`render`函数来生成模板页面  
 vue  在new Vue()最后的渲染只认render 函数 所有的东西 html,template 都会编译成render函数  
+
+
+
+### createElement 参数
 demo：  
 ```
 render (h) {
   return h('div', {}, this.text)
 }
 ```
-`render`函数里面的传参h就是Vue里面的`createElement`方法，`return`返回一个`createElement`方法，其中要传3个参数，第一个参数就是创建的div标签；第二个参数传了一个对象，对象里面可以是我们组件上面的props，或者是事件之类的东西；第三个参数就是div标签里面的内容，这里我们指向了data里面的text。  
+`render`函数里面的传参h就是Vue里面的`createElement`方法，`return`返回一个`createElement`方法，（官方文档：返回的其实不是一个实际的 DOM 元素。它更准确的名字可能是 createNodeDescription，因为它所包含的信息会告诉 Vue 页面上需要渲染什么样的节点，及其子节点。我们把这样的节点描述为“虚拟节点 (Virtual Node)”，也常简写它为“VNode”。“虚拟 DOM”是我们对由 Vue 组件树建立起来的整个 VNode 树的称呼。）
 
+其中可以传三个参数：
+* 第一个参数 {String | Object | Function} 表示可以传一个 HTML 标签字符串，组件选项对象，或者解析上述任何一种的一个 async 异步函数。必需参数；
+* 第二个参数 {Object} 一个包含模板相关属性的数据对象，对象里面可以是我们组件上面的props，或者是事件之类的东西，你可以在 template 中使用这些特性。可选参数；
+  data的对象
+  ``` javascript
+    {
+    // 和`v-bind:class`一样的 API
+    // 接收一个字符串、对象或字符串和对象组成的数组
+    'class': {
+      foo: true,
+      bar: false
+    },
+    // 和`v-bind:style`一样的 API
+    // 接收一个字符串、对象或对象组成的数组
+    style: {
+      color: 'red',
+      fontSize: '14px'
+    },
+    // 普通的 HTML 特性
+    attrs: {
+      id: 'foo'
+    },
+    // 组件 props
+    props: {
+      myProp: 'bar'
+    },
+    // DOM 属性
+    domProps: {
+      innerHTML: 'baz'
+    },
+    // 事件监听器基于 `on`
+    // 所以不再支持如 `v-on:keyup.enter` 修饰器
+    // 需要手动匹配 keyCode。
+    on: {
+      click: this.clickHandler
+    },
+    // 仅用于组件，用于监听原生事件，而不是组件内部使用
+    // `vm.$emit` 触发的事件。
+    nativeOn: {
+      click: this.nativeClickHandler
+    },
+    // 自定义指令。注意，你无法对 `binding` 中的 `oldValue`
+    // 赋值，因为 Vue 已经自动为你进行了同步。
+    directives: [
+      {
+        name: 'my-custom-directive',
+        value: '2',
+        expression: '1 + 1',
+        arg: 'foo',
+        modifiers: {
+          bar: true
+        }
+      }
+    ],
+    // 作用域插槽格式
+    // { name: props => VNode | Array<VNode> }
+    scopedSlots: {
+      default: props => createElement('span', props.text)
+    },
+    // 如果组件是其他组件的子组件，需为插槽指定名称
+    slot: 'name-of-slot',
+    // 其他特殊顶层属性
+    key: 'myKey',
+    ref: 'myRef',
+    // 如果你在渲染函数中向多个元素都应用了相同的 ref 名，
+    // 那么 `$refs.myRef` 会变成一个数组。
+    refInFor: true
+  }
+  ```
+* 第三个参数 {String | Array} 子虚拟节点 (VNodes)，由 `createElement()` 构建而成， 也可以使用字符串来生成“文本虚拟节点”。可选参数。
+ 如：
+  ```javascript
+    [
+      '先写一些文字',
+      createElement('h1', '一则头条'),
+      createElement(MyComponent, {
+        props: {
+          someProp: 'foobar'
+        }
+      })
+    ]
+  ```
 使用render函数的结果和我们之前使用`template`解析出来的结果是一样的。`render`函数是发生在`beforeMount`和`mounted`之间的，这也从侧面说明了，在`beforeMount`的时候，`$el`还只是我们在HTML里面写的节点，然后到`mounted`的时候，它就把渲染出来的内容挂载到了`DOM`节点上。这中间的过程其实是执行了`render function`的内容。    
 
 在使用`.vue`文件开发的过程当中，我们在里面写了`template`模板，在经过了`vue-loader`的处理之后，就变成了`render function`，最终放到了`vue-loader`解析过的文件里面。这样做有什么好处呢？原因是由于在解析`template`变成`render function`的过程，是一个非常耗时的过程，`vue-loader`帮我们处理了这些内容之后，当我们在页面上执行`vue`代码的时候，效率会变得更高。  
+
+
 
 之前的实例可以改为render 写法
 ``` javascript

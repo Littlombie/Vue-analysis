@@ -15,6 +15,7 @@
       <div slot="slot2">张三</div>
       <div slot="slot1">李四</div>
     </mycom>
+    <button @click="add">加一</button>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17-beta.0/vue.min.js"></script>
   <script>
@@ -22,8 +23,11 @@
       render: function (createElement) {
           var _this = this;
           var inps = createElement('input', {
+            attrs: {
+              type: 'number'
+            },
             domProps: {
-              value: _this.newV
+              value: _this.v
             },
             on: {
               input: function (event) {
@@ -47,25 +51,9 @@
             return [1, 23, 4, 5, 6, 55, 65]
           }
         }
-
       },
       data: {
         newV: 0
-      },
-      // computed: {
-      //   newV () {
-      //     return this.v 
-      //   }
-      // },
-      watch: {
-        v(n,o) {
-          console.log('sss');
-          this.newV = n;
-          immediate: true
-        }
-      },
-      methods: {
-
       }
     });
     var app = new Vue({
@@ -77,6 +65,9 @@
       methods: {
         updateValue (value) {
           this.num = value;
+        },
+        add () {
+          this.num++;
         }
       }
     })

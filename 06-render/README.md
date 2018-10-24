@@ -128,6 +128,152 @@ render (h) {
 
 在使用`.vue`文件开发的过程当中，我们在里面写了`template`模板，在经过了`vue-loader`的处理之后，就变成了`render function`，最终放到了`vue-loader`解析过的文件里面。这样做有什么好处呢？原因是由于在解析`template`变成`render function`的过程，是一个非常耗时的过程，`vue-loader`帮我们处理了这些内容之后，当我们在页面上执行`vue`代码的时候，效率会变得更高。  
 
+VNodes必须唯一
+组件树中的所有 VNodes 必须是唯一的。这意味着，下面的 render function 是无效的： 
+``` javascript
+render: function (createElement) {
+  var myParagraphVNode = createElement('p', 'hi')
+  return createElement('div', [
+    // 错误-重复的 VNodes
+    myParagraphVNode, myParagraphVNode
+  ])
+}
+```
+如果你真的需要重复很多次的元素/组件，你可以使用工厂函数来实现。例如，下面这个例子 render 函数完美有效地渲染了 20 个相同的段落：
+``` javascript
+  render: function (createElement) {
+  return createElement('div',
+    Array.apply(null, { length: 20 }).map(function () {
+      return createElement('p', 'hi')
+    })
+  )
+}
+```
+### 使用JavaScript 代替模板功能
+只要在原生的 JavaScript 中可以轻松完成的操作，Vue 的 render 函数就不会提供专有的替代方法。比如，在 template 中使用的 v-if 和 v-for：
+``` html
+<ul v-if="items.length">
+  <li v-for="item in items">{{ item.name }}</li>
+</ul>
+<p v-else>No items found.</p>
+```
+这些都会在 render 函数中被 JavaScript 的 if/else 和 map 重写：
+``` javascript
+props: ['items'],
+render: function (createElement) {
+  if (this.items.length) {
+    return createElement('ul', this.items.map(function (item) {
+      return createElement('li', item.name)
+    }))
+  } else {
+    return createElement('p', 'No items found.')
+  }
+}
+```
+v-model  
+render 函数中没有与 v-model 的直接对应 - 你必须自己实现相应的逻辑：
+``` javascript
+props: ['value'],
+render: function (createElement) {
+  var self = this
+  return createElement('input', {
+    domProps: {
+      value: self.value
+    },
+    on: {
+      input: function (event) {
+        self.$emit('input', event.target.value)
+      }
+    }
+  })
+}
+```
+这就是深入底层的代价，但与 v-model 相比，这可以让你更好地控制交互细节。
+
+#### 事件&案件修饰符
+对于 .passive、.capture 和 .once事件修饰符, Vue 提供了相应的前缀可以用于 on：
+Modifier(s) |	Prefix
+|-|-|
+.passive |	&
+.capture|	!
+.once|	~
+.capture.once or .once.capture	| ~!
+
+例如:
+``` javascript
+  on: {
+    '!click': this.doThisInCapturingMode,
+    '~keyup': this.doThisOnce,
+    '~!mouseover': this.doThisOnceInCapturingMode
+  }
+```
+对于其他的修饰符，前缀不是很重要，因为你可以在事件处理函数中使用事件方法：
+Modifier(s) |	Equivalent in Handler
+|-|-|
+.stop |	event.stopPropagation()
+.prevent|	event.preventDefault()
+.self |	if (event.target !== event.currentTarget) return
+Keys: .enter, .13	 | if (event.keyCode !== 13) return (change 13 to another key code for other key modifiers)
+Modifiers Keys: .ctrl, .alt, .shift, .meta |	if (!event.ctrlKey) return (change ctrlKey to altKey, shiftKey, or metaKey, respectively)
+这里是一个使用所有修饰符的例子：
+``` javascript
+  on: {
+    keyup: function (event) {
+      // 如果触发事件的元素不是事件绑定的元素
+      // 则返回
+      if (event.target !== event.currentTarget) return
+      // 如果按下去的不是 enter 键或者
+      // 没有同时按下 shift 键
+      // 则返回
+      if (!event.shiftKey || event.keyCode !== 13) return
+      // 阻止 事件冒泡
+      event.stopPropagation()
+      // 阻止该元素默认的 keyup 事件
+      event.preventDefault()
+      // ...
+    }
+  }
+```
+#### 插槽
+你可以通过 this.$slots 访问静态插槽的内容，得到的是一个 VNodes 数组：
+``` javascript
+render: function (createElement) {
+  // `<div><slot></slot></div>`
+  return createElement('div', this.$slots.default)
+}
+```
+也可以通过 this.$scopedSlots 访问作用域插槽，得到的是一个返回 VNodes 的函
+``` javascript
+props: ['message'],
+render: function (createElement) {
+  // `<div><slot :text="message"></slot></div>`
+  return createElement('div', [
+    this.$scopedSlots.default({
+      text: this.message
+    })
+  ])
+}
+```
+如果要用渲染函数向子组件中传递作用域插槽，可以利用 `VNode` 数据对象中的 `scopedSlots` 域：
+``` javascript
+render: function (createElement) {
+  return createElement('div', [
+    createElement('child', {
+      // 在数据对象中传递 `scopedSlots`
+      // 格式：{ name: props => VNode | Array<VNode> }
+      scopedSlots: {
+        default: function (props) {
+          return createElement('span', props.text)
+        }
+      }
+    })
+  ])
+}
+```
+### [AST](http://www.php.cn/js-tutorial-407382.html) 
+
+AST是指抽象语法树（abstract syntax tree），或者语法树（syntax tree），是源代码的抽象语法结构的树状表现形式。Vue在mount过程中，template会被编译成AST语法树。
+然后，经过generate（将AST语法树转化成render function字符串的过程）得到render函数，返回VNode。
 
 ### 源码分析
 
@@ -254,7 +400,6 @@ export function initRender (vm: Component) {
 实际上，`vm.$createElement` 方法定义是在执行 `initRender` 方法的时候，可以看到除了 `vm.$createElement` 方法，还有一个 `vm._c` 方法，它是被模板编译成的 `render` 函数使用，而 `vm.$createElement` 是用户手写 `render` 方法使用的， 这俩个方法支持的参数相同，并且内部都调用了 `createElement` 方法。
 
 # 总结
-
 
 1. render方法的实质就是生成template模板； 
 2. 通过调用一个方法来生成，而这个方法是通过render方法的参数传递给它的； 

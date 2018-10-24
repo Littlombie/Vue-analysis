@@ -36,8 +36,7 @@
             },
             // 正常的 HTML 特性
             attrs: {
-              id: 'foo',
-              name: 'foo-' + this.level
+              id: 'foo'
             },
             // 组件 props
             props: {
@@ -53,7 +52,7 @@
             on: {
               click: this.clickHandler
             },
-            // 仅对于组件，用于监听原生事件，而不是组件使用 vm.$emit 触发的事件。
+            // 仅对于组件，用于监听原生事件，而不是组件使用 vm.$emit 触发的事件。(https://www.cnblogs.com/mrzhu/p/8005138.html)
             nativeOn: {
               click: this.nativeClickHandler
             },
@@ -89,12 +88,9 @@
           required: true
         }
       },
-      created() {
-        console.log(this.$refs);
-      },
       methods: {
         clickHandler () {
-          console.log('hahahah');
+          console.log(11111);
         }
       }
     })

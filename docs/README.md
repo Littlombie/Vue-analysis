@@ -1,6 +1,9 @@
-## 一、Vue+Webpack的前端工程工作流搭建
-### 1、研究方向
-    webpack机制
+# vue 学习体系
+
+### 一、Vue+Webpack的前端工程工作流搭建
+
+### 1、webpack
+* webpack机制
 * 研究方法
 	- webpack原理，各个参数的用法，使用场景，解决哪些问题，带来哪些好处
 	- 关键字：webpack分块打包，分模块打包，压缩打包，合并，转义
@@ -11,22 +14,21 @@
 	- 什么是长缓存？在webpack中如何做到长缓存优化？
 	- 什么是Tree-shaking?CSS可以Tree-shaking吗
 
-### 2、研究方向  
-	 webpack loader机制
+### 2、webpack loade  
+* webpack loader机制
 * 研究方法
 	- 有哪些loader，如何使用，原理是什么？
 	- vue-loader有哪些功能？原理是什么？有哪些参数？怎么用？有哪些配合使用的loader或者plugin，他们之间如何耦合？
 	
 
-### 3、研究方向
-	 webpack plugin机制
+### 3、webpack plugin
+* webpack plugin机制
 * 研究方法
 	- 有哪些loader，如何使用，原理是什么？
 
-### 4、研究方向
-	 webpack-dev-server
-* 研究方法
-	- webpack-dev-server和http服务器如nginx有什么区别?
+### 4、webpack-dev-server
+ * 研究方法  
+   * webpack-dev-server和http服务器如nginx有什么区别?
 
 
 ## 二、Vue

@@ -1,0 +1,30 @@
+{
+  "name": "Vue-analysis",
+  "version": "1.0.0",
+  "description": "analysis vue.js deeply",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "deploy": "sh deploy.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littlombie/Vue-analysis.git"
+  },
+  "keywords": [
+    "vue",
+    "analysis"
+  ],
+  "author": "Littlombie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/littlombie/Vue-analysis/issues"
+  },
+  "homepage": "https://github.com/littlombie/Vue-analysis#readme",
+  "devDependencies": {
+    "vuepress": "^0.10.0"
+  }
+}

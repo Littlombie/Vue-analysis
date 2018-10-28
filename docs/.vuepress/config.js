@@ -16,7 +16,7 @@ module.exports = {
   ],
   serviceWorker: false,
   themeConfig: {
-    repo: 'littlombie/Vue-analysis',
+    repo: 'Littlombie/Vue-analysis',
     editLinks: true,
     docsDir: 'docs',
     editLinkText: '在 GitHub 上编辑此页',

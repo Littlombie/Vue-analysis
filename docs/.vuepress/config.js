@@ -1,6 +1,6 @@
 module.exports = {
   base: '/Vue-analysis/',
-  dest: 'dist',
+  dest: 'docs/.vuepress/dist',
   title: 'Vue - 系统学习',
   description: 'Analysis vue.js deeply',
   head: [
@@ -19,6 +19,7 @@ module.exports = {
     repo: 'Littlombie/Vue-analysis',
     editLinks: true,
     docsDir: 'docs',
+    docsBranch: 'master',
     editLinkText: '在 GitHub 上编辑此页',
     lastUpdated: 'Last Updated',
     nav: [

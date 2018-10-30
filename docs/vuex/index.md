@@ -44,7 +44,7 @@ new Vue({
 以下是一个表示“单向数据流”理念的极简示意：
 
 
-![单向数据流](images/zhuangtai.png)
+![单向数据流](Vua-analysis/assets/vue-zhuangtai.png)
 
 
 但是，当我们的应用遇到多个组件共享状态时，单向数据流的简洁性很容易被破坏：
@@ -62,7 +62,7 @@ new Vue({
 这就是 Vuex 背后的基本思想，借鉴了 [Flux](https://facebook.github.io/flux/docs/overview.html)、[Redux](http://redux.js.org/)、和 [The Elm Architecture](https://guide.elm-lang.org/architecture/)。与其他模式不同的是，Vuex 是专门为 Vue.js 设计的状态管理库，以利用 Vue.js 的细粒度数据响应机制来进行高效的状态更新。
 
 
-![vuex](/Vue-analysis/images/vuex.png)
+![vuex](Vua-analysis/assets/vuex-02.png)
 
 
 简而言之：Vuex 相当于某种意义上设置了读写权限的全局变量，将数据保存保存到该“全局变量”下，并通过一定的方法去读写数据。

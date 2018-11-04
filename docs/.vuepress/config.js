@@ -1,7 +1,7 @@
 module.exports = {
   base: '/Vue-analysis/',
   dest: 'docs/.vuepress/dist',
-  title: 'Vuejs深入学习',
+  title: 'Vue深入学习',
   description: 'Analysis vue.js deeply',
   head: [
     ['link', { rel: 'icon', href: `/logo.png` }],
@@ -24,6 +24,10 @@ module.exports = {
     editLinkText: '在 GitHub 上编辑此页',
     lastUpdated: 'Last Updated',
     nav: [
+      {
+        text: 'Vuejs文档',
+        link: 'https://cn.vuejs.org/v2/guide/index.html'
+      },
       {
         text: '我的博客',
         link: 'https://littlombie.github.io/'

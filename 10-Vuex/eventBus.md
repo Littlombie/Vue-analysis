@@ -1,9 +1,9 @@
 #eventBus
 
-eventBus的作用就是解决一些数据量不大，但是需要组件 之间传值。这时候用Vuex的话就显得比较大材小用。
+`eventBus`的作用就是解决一些数据量不大，但是需要组件 之间传值。这时候用`Vuex`的话就显得比较大材小用。
 
 ## 使用方法
-在根目录创建一个event-bus.js文件夹
+在根目录创建一个`event-bus.js`文件夹：
 
 ``` javascript
 const install = function (Vue) {
@@ -27,15 +27,15 @@ const install = function (Vue) {
 }
 export default install
 ```
-上边其实就是创建了一个`Vue`实例，然后创建三个方法，其中`event`是表示发送改变参数，`on`表示接收参数，off表示停止参数接收，内部还可以配置`data`，看个人项目的实际需求
+上边其实就是创建了一个`Vue`实例，然后创建三个方法，其中`event`是表示发送改变参数，`on`表示接收参数，`off`表示停止参数接收，内部还可以配置`data`，看个人项目的实际需求。  
 
-接着在main.js中引入bus文件，注册 bus
+接着在`main.js`中引入`bus`文件，注册 `bus`。 
 
 ``` javascript
 import Bus from './vue-bus'
 Vue.use(Bus)
 ```
-然后就可以在组件中使用bus了
+然后就可以在组件中使用bus了  
 A组件发送
 ``` html
 <template>
@@ -54,7 +54,7 @@ A组件发送
   })
 </script>
 ```
-B组件接收
+B组件接收  
 ``` html
 <template>
   <div>

@@ -1,7 +1,7 @@
 module.exports = {
   base: '/Vue-analysis/',
   dest: 'docs/.vuepress/dist',
-  title: 'Vue - 系统学习',
+  title: 'Vuejs深入学习',
   description: 'Analysis vue.js deeply',
   head: [
     ['link', { rel: 'icon', href: `/logo.png` }],
@@ -59,7 +59,9 @@ module.exports = {
         title: 'vuex',
         collapsable: false,
         children: [
-          ['vuex/', 'vuex']
+          ['vuex/', 'vuex'],
+          'vuex/core',
+          'vuex/eventBus'
         ]
       }
     ]

@@ -44,7 +44,7 @@ new Vue({
 以下是一个表示“单向数据流”理念的极简示意：
 
 
-![单向数据流](Vue-analysis/assets/vue-zhuangtai.png)
+![单向数据流](images/zhuangtai.png)
 
 
 但是，当我们的应用遇到多个组件共享状态时，单向数据流的简洁性很容易被破坏：
@@ -61,43 +61,21 @@ new Vue({
 
 这就是 Vuex 背后的基本思想，借鉴了 [Flux](https://facebook.github.io/flux/docs/overview.html)、[Redux](http://redux.js.org/)、和 [The Elm Architecture](https://guide.elm-lang.org/architecture/)。与其他模式不同的是，Vuex 是专门为 Vue.js 设计的状态管理库，以利用 Vue.js 的细粒度数据响应机制来进行高效的状态更新。
 
-![vuex](Vue-analysis/assets/vuex-02.png)
+
+![vuex](images/vuex.png)
 
 
 简而言之：Vuex 相当于某种意义上设置了读写权限的全局变量，将数据保存保存到该“全局变量”下，并通过一定的方法去读写数据。
 
 
-## 什么情况下我们应该使用vuex？
+# 什么情况下我们应该使用vuex？
 虽然 Vuex 可以帮助我们管理共享状态，但也附带了更多的概念和框架。这需要对短期和长期效益进行权衡。
 
 如果您不打算开发大型单页应用，使用 Vuex 可能是繁琐冗余的。确实是如此——如果您的应用够简单，您最好不要使用 Vuex。一个简单的 [store](https://cn.vuejs.org/v2/guide/state-management.html#%E7%AE%80%E5%8D%95%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B5%B7%E6%AD%A5%E4%BD%BF%E7%94%A8) 模式就足够您所需了。但是，如果您需要构建一个中大型单页应用，您很可能会考虑如何更好地在组件外部管理状态，Vuex 将会成为自然而然的选择。
 
 
 
-Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的规则：  
-* 应用层级的状态应该集中到单个 store 对象中。
-* 提交 mutation 是更改状态的唯一方法，并且这个过程是同步的。
-* 异步逻辑都应该封装到 action 里面。
-
-对于大型应用我们会希望把 Vuex 相关代码分割到模块中。下面是项目结构示例：
-```
-├── index.html
-├── main.js
-├── api
-│   └── ... # 抽取出API请求
-├── components
-│   ├── App.vue
-│   └── ...
-└── store
-    ├── index.js          # 我们组装模块并导出 store 的地方
-    ├── actions.js        # 根级别的 action
-    ├── mutations.js      # 根级别的 mutation
-    └── modules
-        ├── cart.js       # 购物车模块
-        └── products.js   # 产品模块
-```
-
-## 参考
+# 参考
 
 [Vuex](https://vuex.vuejs.org/zh/)
 [prop](https://cn.vuejs.org/v2/guide/components.html#通过-Prop-向子组件传递数据)

@@ -397,7 +397,7 @@ export function initRender (vm: Component) {
 实际上，`vm.$createElement` 方法定义是在执行 `initRender` 方法的时候，可以看到除了 `vm.$createElement` 方法，还有一个 `vm._c` 方法，它是被模板编译成的 `render` 函数使用，而 `vm.$createElement` 是用户手写 `render` 方法使用的， 这俩个方法支持的参数相同，并且内部都调用了 `createElement` 方法。
 
 ### 总结
-#
+
 1. render方法的实质就是生成template模板； 
 2. 通过调用一个方法来生成，而这个方法是通过render方法的参数传递给它的； 
 3. 这个方法有三个参数，分别提供标签名，标签相关属性，标签内部的html内容 

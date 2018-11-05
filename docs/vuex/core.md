@@ -55,7 +55,7 @@ state 只是读取数据，他不会修改数据
 getters中可以通过 参数`getters`来相互依赖引用其他的`getters（getters.getInfo）`
 
 ## Mutations
-mutations 是对`state`中的数据修改  
+mutations 是对`state`中的数据修改; 也就是`set`、`get`中的`set`，这是`vuex`中唯一修改`state`的方式，但不支持异步操作。第一个参数默认是`state`。外部调用方式：`store.commit('SET_AGE')`。和`vue`中的`methods`类似。
 类似于js 的观察这模式，页面提交修改，然后这边做改变处理
 ``` javascript
 mutations: {

@@ -56,7 +56,7 @@ getters中可以通过 参数`getters`来相互依赖引用其他的`getters（g
 
 ## Mutations
 mutations 是对`state`中的数据修改; 也就是`set`、`get`中的`set`，这是`vuex`中唯一修改`state`的方式，但不支持异步操作。第一个参数默认是`state`。外部调用方式：`store.commit('SET_AGE')`。和`vue`中的`methods`类似。
-类似于js 的观察这模式，页面提交修改，然后这边做改变处理
+类似于js 的观察者模式，页面提交修改，然后这边做改变处理
 ``` javascript
 mutations: {
   increment(state,n = 1) {
@@ -69,12 +69,14 @@ mutations: {
 ```
 mutations中尽量不要操作异步数据，操作的话 数据不会立即改变，我们一般情况下都是在actions中操作异步数据
 ## Actions
+在 `mutation` 中混合异步调用会导致你的程序很难调试。例如，当你调用了两个包含异步回调的 mutation 来改变状态，你怎么知道什么时候回调和哪个先回调呢？这就是为什么我们要区分这两个概念。在 Vuex 中，mutation 都是同步事务：
 <!-- actions 也是用来提交修改state的，但是它是显式的提交修改mutations，进而可以异步的实现异步 -->
 Action 类似于 `mutation`，不同在于：
 
 Action 提交的是 `mutation`，而不是直接变更状态。
-Action 可以包含任意异步操作。
+Action 可以包含任意异步操作。  
 
+第一个参数默认是和`store`具有相同参数属性的对象。外部调用方式：`store.dispatch('nameAsyn')`。
 操作
 ``` javascript
 actions: {
@@ -114,7 +116,8 @@ actions: {
 会发现 在两秒后才会状态才会发生改变
 ## Modules
 如果项目比较大的时候，项目全部放到一个`store.js` 或者 `main.js` 中 ，感觉比较乱，不太友好，
-所以我们需要按模块分开， 
+所以我们需要按模块分开，   
+store的子模块，内容就相当于是store的一个实例。调用方式和前面介绍的相似，只是要加上当前子模块名，如：`store.a.getters.xxx() ` 
 每个模块拥有自己的 `state`、`mutation`、`action`、`getter`、甚至是嵌套子模块——从上至下进行同样方式的分割：
 ``` javascript
 const moduleA = {
@@ -159,9 +162,12 @@ Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的
 │   └── ...
 └── store
     ├── index.js          # 我们组装模块并导出 store 的地方
-    ├── actions.js        # 根级别的 action
+    ├── state.js          # 跟级别的 state
+    ├── getters.js        # 跟级别的 getter
+    ├── mutation-types.js # 根级别的mutations名称（官方推荐mutions方法名使用大写）
     ├── mutations.js      # 根级别的 mutation
+    ├── actions.js        # 根级别的 action
     └── modules
-        ├── cart.js       # 购物车模块
-        └── products.js   # 产品模块
+        ├── m1.js         # 模块1
+        └── m2.js         # 模块2
 ```

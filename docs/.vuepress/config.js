@@ -65,6 +65,7 @@ module.exports = {
         children: [
           ['vuex/', 'vuex'],
           'vuex/core',
+          'vuex/auxiliary',
           'vuex/eventBus'
         ]
       }

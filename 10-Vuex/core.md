@@ -14,7 +14,7 @@ new Vue ({
   store, // store:store
 })
 ```
-一个`vue Store` 里边包括`state（状态）`、`getters（派生状态）`、`mutations（提交修改）`、`actions（提交修改数据）`、`module`。
+一个`vue Store` 里边包括`state（状态）`、`getters（派生状态）`、`mutations（提交修改）`、`actions（提交修改数据）`、`module（模块化）`。
 
 ## State
 `state` 是用来存储状态，也就是变量；

@@ -55,18 +55,49 @@ state 只是读取数据，他不会修改数据
 getters中可以通过 参数`getters`来相互依赖引用其他的`getters（getters.getInfo）`
 
 ## Mutations
-mutations 是对`state`中的数据修改; 也就是`set`、`get`中的`set`，这是`vuex`中唯一修改`state`的方式，但不支持异步操作。第一个参数默认是`state`。外部调用方式：`store.commit('SET_AGE')`。和`vue`中的`methods`类似。
+mutations 是对`state`中的数据修改; 也就是`set`、`get`中的`set`，这是`vuex`中唯一修改`state`的方式，但不支持异步操作。  
+和`vue`中的`methods`事件注册类似：每个mutaion都有一个字符串的事件类型（type）和一个回调函数（handler）。这个回调函数就是我们实际进行状态更改的地方，并且他会接受state作为第一个参数。 
 类似于js 的观察者模式，页面提交修改，然后这边做改变处理
+
+### 提交载荷（payload）
+可以向 `store.commit` 传入额外的参数，即 mutation 的 载荷（payload）
+
 ``` javascript
 mutations: {
   increment(state,n = 1) {
+    // 第一个参数是 state，第二个参数叫额外的参数，这里是n
     state.count += n;
   },
   decresement(state) {
     state.count -- ;
   }
 }
+// 回调函数 increment 和参数10，后者是作为额外参数传入，n 就是10
+store.commit('increment', 3)
 ```
+在大多数情况下，载荷应该是一个对象，这样可以包含多个字段并且记录的 mutation 会更易读：
+``` javascript
+mutations: {
+  increment (state, payload) {
+	  // payload 作为一个对象，更加可读，统一对象形式调用
+    state.count += payload.amount
+  }
+}
+// 传入的是对象（即将额外的 mutation 参数以对象的方式传入）
+store.commit('increment', {
+  amount: 10
+})
+```
+### 对象风格提交方式
+提交 mutation 的另一种方式是直接使用包含 type 属性的对象：
+``` javascript
+// 这里也是传入一个对象，不过这个对象包含了 type 属性
+store.commit({
+  type: 'increment',
+  amount: 10
+})
+```
+
 mutations中尽量不要操作异步数据，操作的话 数据不会立即改变，我们一般情况下都是在actions中操作异步数据
 ## Actions
 在 `mutation` 中混合异步调用会导致你的程序很难调试。例如，当你调用了两个包含异步回调的 mutation 来改变状态，你怎么知道什么时候回调和哪个先回调呢？这就是为什么我们要区分这两个概念。在 Vuex 中，mutation 都是同步事务：

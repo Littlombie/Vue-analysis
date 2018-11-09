@@ -160,7 +160,23 @@ actions: {
     }
   }
 ```
-会发现 在两秒后才会状态才会发生改变
+会发现 在两秒后才会状态才会发生改变  
+
+在 `store` 上注册 `action`。处理函数总是接受 `context` 作为第一个参数，`payload` 作为第二个参数（可选）。
+
+context 对象包含以下属性：
+``` javascript
+{
+  state,      // 等同于 `store.state`，若在模块中则为局部状态
+  rootState,  // 等同于 `store.state`，只存在于模块中
+  commit,     // 等同于 `store.commit`
+  dispatch,   // 等同于 `store.dispatch`
+  getters,    // 等同于 `store.getters`
+  rootGetters // 等同于 `store.getters`，只存在于模块中
+}
+```
+同时如果有第二个参数 payload 的话也能够接收
+
 ## Modules
 如果项目比较大的时候，项目全部放到一个`store.js` 或者 `main.js` 中 ，感觉比较乱，不太友好，
 所以我们需要按模块分开，   
@@ -220,4 +236,7 @@ Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的
 ```
 
 ## 参考
-[关于 mutation](https://juejin.im/post/5a5f1a9df265da3e2f00faae)
+[vuex](https://vuex.vuejs.org/zh/)  
+[关于 mutation](https://juejin.im/post/5a5f1a9df265da3e2f00faae)  
+[【vuex入门系列02】mutation接收单个参数和多个参数](https://segmentfault.com/a/1190000011528501)  
+[vuex中mutation/action的传参方式](https://blog.csdn.net/wopelo/article/details/80285167)

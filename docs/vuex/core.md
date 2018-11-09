@@ -97,6 +97,22 @@ store.commit({
   amount: 10
 })
 ```
+>这里只是一种提交 mutations 的方式，不必深究。
+当使用这种对象风格的提交方式，整个对象都作为载荷传给 mutation 函数，因此 handler 保持不变：
+``` javascript
+mutations: {
+  increment (state, payload) {
+    state.count += payload.amount
+  }
+}
+// vuex 会将这个对象分解，除了 type 之外的，依然会是作为额外参数传入
+store.commit({
+  type: 'increment',
+  amount: 10
+})
+```
+
+将整个对象传给 mutation后，vuex 会根据 type 参数识别到这是一个mutation 的载荷参数，然后自动填充 state 参数为第一位，第二位参数为传入的这个对象的第二位参数。
 
 mutations中尽量不要操作异步数据，操作的话 数据不会立即改变，我们一般情况下都是在actions中操作异步数据
 ## Actions
@@ -202,3 +218,6 @@ Vuex 并不限制你的代码结构。但是，它规定了一些需要遵守的
         ├── m1.js         # 模块1
         └── m2.js         # 模块2
 ```
+
+## 参考
+[关于 mutation](https://juejin.im/post/5a5f1a9df265da3e2f00faae)

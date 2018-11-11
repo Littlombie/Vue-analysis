@@ -38,7 +38,7 @@ const tpl = {
   }
 }
 ```
-state 只是读取数据，他不会修改数据
+`state` 只是读取数据，他不会修改数据
 ## Getters
 `getters` 表示派生状态。也就是`set`、`get`中的`get`，有两个可选参数：`state`、`getters`分别可以获取`state`中的变量和其他的`getters`。外部调用方式：`store.getters.personInfo()`。就和`vue`的`computed`差不多
 ``` javascript
@@ -52,15 +52,15 @@ state 只是读取数据，他不会修改数据
     }
   }
 ```
-getters中可以通过 参数`getters`来相互依赖引用其他的`getters（getters.getInfo）`
+`getters`中可以通过 参数`getters`来相互依赖引用其他的`getters（getters.getInfo）`
 
 ## Mutations
-mutations 是对`state`中的数据修改; 也就是`set`、`get`中的`set`，这是`vuex`中唯一修改`state`的方式，但不支持异步操作。  
+`mutations` 是对`state`中的数据修改; 也就是`set`、`get`中的`set`，这是`vuex`中唯一修改`state`的方式，但不支持异步操作。  
 和`vue`中的`methods`事件注册类似：每个mutaion都有一个字符串的事件类型（type）和一个回调函数（handler）。这个回调函数就是我们实际进行状态更改的地方，并且他会接受state作为第一个参数。 
 类似于js 的观察者模式，页面提交修改，然后这边做改变处理
 
 ### 提交载荷（payload）
-可以向 `store.commit` 传入额外的参数，即 mutation 的 载荷（payload）
+可以向 `store.commit` 传入额外的参数，即 `mutation` 的 载荷（payload）
 
 ``` javascript
 mutations: {
